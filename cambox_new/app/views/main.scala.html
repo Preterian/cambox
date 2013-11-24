@@ -1,0 +1,33 @@
+@(title: Html)(content: Html)
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
+	<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+    <title>Cambox</title>
+  </head>
+
+  <body>
+
+    <!-- Wrap all page content here -->
+    <div id="wrap">
+
+      <!-- Begin page content -->
+        <div class="page-header">
+          <h1>Cambox!</h1>
+        </div>
+        <div id="content-wrapper">
+        	@content
+        </div>
+      </div>
+
+    <div id="footer">
+      	<h2>Here will be some cool footer!</h2>
+    </div>
+
+  </body>
+</html>
