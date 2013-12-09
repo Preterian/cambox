@@ -1,14 +1,12 @@
-
-html,
-body {
-  height: 100%;
+html,body {
+	height: 100%;
 }
 
 #wrap {
-  min-height: 100%;
-  height: auto;
-  margin: 0 auto -200px;
-  padding: 0 0 60px;
+	min-height: 100%;
+	height: auto;
+	margin: 0 auto -80px;
+	padding: 0 0 60px;
 }
 
 #content-wrapper {
@@ -17,19 +15,29 @@ body {
 	min-height: 100% !important;
 }
 
+/* Wrapper for page content to push down footer */
+#wrap {
+	min-height: 100%;
+	height: auto;
+	/* Negative indent footer by its height */
+	margin: 0 auto -80px;
+	/* Pad bottom by footer height */
+	padding: 0 0 200px;
+}
+
+/* Set the fixed height of the footer here */
 #footer {
-  height: 200px;
-  background-color: #587898;
+	height: 80px;
+	background-color: #262626;
 }
 
 #footer h2 {
 	text-align: center;
-	font: 40px Arial;
-	padding-top: 50px;
+	font: 18px Arial;
 	color: #fff;
+	line-height: 80px;
 }
-/* HEADER */ 
-
+/* HEADER */
 .page-header h1 {
 	font: 65px Arial, sans-serif;
 	font-weight: bold;
@@ -42,8 +50,7 @@ body {
 	margin: 0 auto;
 }
 
-/* sign up form */ 
-
+/* sign up form */
 #signup-form {
 	width: 700px;
 	margin: 50px auto;
@@ -54,11 +61,9 @@ body {
 	height: 25px;
 }
 
-
 #signup-form label {
 	font: 15px Arial, sans-serif;
 }
-
 
 #signup-form .submit-button {
 	margin-left: 150px;
@@ -101,9 +106,7 @@ body {
 	margin-bottom: 10px;
 }
 
-
 /* login */
-
 #form-signin {
 	width: 300px;
 	margin: 170px 0 0 20%;
@@ -208,4 +211,509 @@ input {
 	text-align: center;
 	font: 16px Arial, sans-serif;
 	font-weight: bold;
+}
+
+/* VIDEO */
+.player {
+	background-color: #000 !important;
+	width: 960px;
+	height: 540px;
+}
+
+.vjs-poster {
+	background-color: #000;
+}
+
+#mainDivPlayer {
+	margin: 50px auto;
+	width: 960px;
+	outline: 0px solid black;
+}
+
+#controlButtons {
+	width: 945px;
+	background-color: #F4F5F7;
+	outline: 0px solid black;
+	padding: 15px;
+	padding-left: 0;
+	padding-bottom: 15px;
+	position: relative;
+	margin-bottom: 20px;
+}
+
+#controlButtons button {
+	background-color: #587898;
+	border: none;
+	height: 40px;
+	color: white;
+	font: 18px Arial, sans-serif;
+	padding: 10px;
+	padding-left: 40px;
+	position: relative;
+}
+
+#controlButtons button:hover {
+	background-color: #333;
+	cursor: pointer;
+}
+
+#controlButtons button img {
+	position: absolute;
+	left: 10px;
+	top: 8px;
+}
+
+#views,#likes {
+	outline: 0px solid black;
+	height: 24px;
+}
+
+#views_icon {
+	width: 24px;
+	height: 24px;
+	background-image: url("icons/views.png");
+}
+
+#likes_icon {
+	width: 24px;
+	height: 24px;
+	background-image: url("icons/heart.png");
+}
+
+.icon {
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	left: 0;
+}
+
+#list_info li {
+	position: relative;
+	padding-left: 30px;
+	list-style: none;
+}
+
+#views,#likes {
+	float: left;
+	padding-right: 15px;
+	font: 18px Arial, sans-serif;
+	color: #333;
+}
+
+#list_info {
+	position: absolute;
+	top: 15px;
+	right: 0;
+}
+
+#upload_date {
+	position: absolute;
+	top: 45px;
+	right: 15px;
+	font: 14px Arial, sans-serif;
+	color: #333;
+}
+
+#descr_div {
+	background-color: #F4F5F7;
+	padding: 15px;
+	margin-bottom: 20px;
+}
+
+#title {
+	margin-bottom: 10px;
+	font: 32px Arial, sans-serif;
+	color: #333;
+	font-weight: bold;
+}
+
+#description {
+	font: 18px Arial, sans-serif;
+	color: #333;
+}
+
+#comments_count {
+	font: 26px Arial, sans-serif;
+	color: #333;
+	font-weight: bold;
+	display: block;
+	float: left;
+}
+
+#link_to_form {
+	font: 14px Arial, sans-serif;
+	color: #333;
+	text-decoration: none;
+	display: block;
+	float: left;
+	padding-top: 12px;
+	padding-left: 15px;
+}
+
+#commets {
+	height: 200px;
+}
+
+.clear {
+	clear: both;
+}
+
+#add_comment textarea {
+	width: 450px;
+	height: 250px;
+	padding: 5px;
+}
+
+#submit_comment {
+	background-color: #587898;
+	border: none;
+	height: 40px;
+	color: white;
+	font: 18px Arial, sans-serif;
+	padding: 10px;
+}
+
+#submit_comment:hover {
+	background-color: #333;
+	cursor: pointer;
+}
+
+#comments textarea {
+	font: 16px Arial, sans-serif;
+	margin: 10px;
+	resize: none;
+	margin-left: 0;
+}
+
+/* search */
+.search-wrapper {
+	margin: 40px auto;
+	width: 400px;
+	height: 40px;
+	padding: 0;
+}
+
+.search-input {
+	width: 310px;
+	height: 30px;
+	margin: 0;
+	float: left;
+	font: 18px Arial;
+	color: black;
+}
+
+.search-submit {
+	float: left;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	background-color: #CC3434;
+	color: #fff;
+	width: 80px;
+}
+
+.search-from {
+	margin: 0;
+	font: 18px Arial;
+}
+
+a:hover,a:active,a:focus,a:visited {
+	border: none;
+	outline: none;
+}
+
+button:hover,button:active,button:focus,button:visited {
+	border: none;
+	outline: none;
+}
+
+.error-msg {
+	margin-top: 100px;
+}
+
+.error-msg h2 {
+	font-size: 30px;
+	color: red;
+	text-align: center;
+}
+
+#form-signin .error {
+	color: red;
+	margin: 5px 0;
+	padding: 0;
+}
+
+.top-nav-bar {
+	height: 34px;
+	width: 100%;
+	background: #262626;
+	border-top: 1px solid #3AE2CE;
+	position: relative;
+}
+
+/*
+ *                        
+ * #   #  ###  ##### #### 
+ * #   # #     #     #   #
+ * #   #  ###  ####  #   #
+ * #   #     # #     #### 
+ * #   # #   # #     #  # 
+ *  ###   ###  ##### #   #
+ */
+#user {
+	margin: 50px auto 0 auto;
+	width: 555px;
+	background-color: #DAF1FF;
+	border-top: 2px solid #BCE6FF;
+}
+
+.NameAndSurname {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 32px;
+	font-weight: bold;
+	margin-bottom: 30px;
+	line-height: 100%;
+	width: 600px;
+	padding: 20px;
+	color: #44BBFF;
+}
+
+.profile-nav ul {
+	margin-left: 100px;
+}
+
+.profile-nav li {
+	margin: 0 0 15px 0;
+	width: 250px;
+	list-style: none;
+}
+
+.profile-nav li a {
+	color: #9AC440;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	background-color: #EEF6DC;
+	border-right: 3px solid #E0EFC0;
+	display: block;
+	padding: 10px 20px;
+}
+
+.profile-nav li a:hover {
+	text-decoration: none;
+	background-color: #E0EFC0;
+}
+
+.float-left {
+	float: left;
+}
+
+#avatar {
+	border: 2px dashed #ccc;
+}
+
+
+.user-info {
+	width: 555px;
+	margin: 0 auto;
+}
+
+.user-info h3 {
+	height: 50px;
+	line-height: 50px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 24px;
+}
+
+.user-info-list {
+	list-style: none;
+	margin: 0 0 50px 0;
+}
+
+
+
+.user-info-list li {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 17px;
+	font-weight: normal;
+	padding: 5px 0;
+}
+/* nav bar */
+
+/* Adjusting the margins, paddings and no list styles */
+.navigation {
+	margin: 0 auto;
+	padding: 0;
+	list-style: none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	position: absolute;
+	top: 0;
+	right: 25%;
+}
+
+/* Little tricking with positions */
+.navigation  li {
+	float: left; /* Show list items inline */
+	width: 120px;
+	position: relative;
+}
+
+/* Playing with Main Categories */
+.navigation  li a {
+	background: #262626;
+	color: #fff;
+	display: block; /* Making sure a element covers whole li area */
+	padding: 8px 7px 8px 7px;
+	text-decoration: none; /* No underline */
+	text-align: center;
+}
+
+.navigation  li a:hover {
+	color: #44BBFF;
+}
+
+/* Sub Cat Menu stuff*/
+.navigation  ul {
+	position: absolute;
+	left: 0;
+	display: none; /* Hide it by default */
+	margin: 0 0 0 -1px;
+	padding: 0;
+	list-style: none;
+	border-bottom: 3px solid #44BBFF;
+}
+
+.navigation  ul li {
+	width: 120px;
+	float: left;
+	border-top: none;
+}
+
+/* Sub Cat menu link properties */
+.navigation  ul a {
+	display: block; /* Making sure a element covers whole li area */
+	height: 15px;
+	padding: 8px 7px 13px 7px;
+	color: #fff;
+	text-decoration: none;
+	border-top: none;
+	border-bottom: 1px dashed #6B6B6B;
+}
+
+.navigation  ul a:hover {
+	color: #44BBFF;
+}
+
+.welcome-top-nav {
+	color: #fff;
+	float: left;
+	background: #262626;
+	padding: 8px 30px;
+	text-align: center;
+	line-height: 15px;
+	height: 17px;
+	margin: 0;
+}
+
+.header-link {
+	color: #333333;
+}
+
+.header-link:hover {
+	text-decoration: none;
+	color: #333333;
+}
+
+
+/* collection */
+
+#videos_div {
+	width: 1017px;
+	outline: 0px solid black;
+	background-color: #F4F5F7;
+	margin: 40px auto;
+}
+
+
+
+.videoPreview {
+	width: 299px;
+	color: #000;
+	outline: 0px solid black;
+	text-decoration: none;
+}
+
+.videoPreview:hover {
+	text-decoration: none;
+}
+
+.previewImg {
+	width: 295px;
+	height: 166px;
+	border: 2px solid #ccc;
+	outline: 0px solid black;
+	position: relative;
+	background-color: #000;
+
+	-webkit-box-shadow: 10px 10px 6px -6px #777;
+	   -moz-box-shadow: 10px 10px 6px -6px #777;
+	        box-shadow: 10px 10px 6px -6px #777;
+	        text-decoration: none;
+}
+
+.playIcon {
+	width: 100px;
+	height: 106px;
+	z-index: 1000;
+	position: absolute;
+	top: 30px;
+	left: 97px;
+	text-decoration: none;
+}
+.playIcon:hover {
+	width: 105px;
+	height:111px;
+	top: 28px;
+	left: 95px;
+	text-decoration: none;
+}
+
+.title {
+	font: 20px arial, sans-serif;
+	margin: 10px 0 0 0;
+	text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -moz-binding: url( 'bindings.xml#ellipsis' );
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    max-width: 100%;
+    text-decoration: none;
+}
+
+.title:hover {
+	color: #44BBFF;
+	text-decoration: none;
+}
+.date {
+	color: #7B8084;
+	font: 12px arial, sans-serif;
+	text-decoration: none;
+}
+
+.date:hover {
+	text-decoration: none;
+}
+
+.clear {
+	clear: both;
+}
+
+.linkToVideo {
+	display: block;
+	width: 299px;
+	outline: 0px solid black;
+	margin: 20px;
+	text-decoration: none;
+	float: left;
 }

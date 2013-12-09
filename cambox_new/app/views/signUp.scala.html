@@ -11,19 +11,19 @@
             <legend>Sign up</legend>
             
             @inputText(
-                signupForm("nickName"), 
+                signupForm("username"), 
                 '_label -> "Username", 
                 '_help -> "Please choose a valid nickname.",
                 '_error -> signupForm.globalError
             )
             
              @inputText(
-                signupForm("firstName"), '_label -> "First name",
+                signupForm("name"), '_label -> "First name",
                 '_help -> "Enter a valid First name."
             )
             
              @inputText(
-                signupForm("lastName"), '_label -> "Last name",
+                signupForm("surname"), '_label -> "Last name",
                 '_help -> "Enter a valid last name."
             )
             

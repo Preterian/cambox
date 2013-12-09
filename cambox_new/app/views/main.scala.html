@@ -2,32 +2,55 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
-	<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-    <title>Cambox</title>
-  </head>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("video_player/video-js.css")">
+<script src="@routes.Assets.at("video_player/video.js")"></script>
+<script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
+<script src="@routes.Assets.at("javascripts/nav-bar.js")"></script>
+<script>videojs.options.flash.swf = "@routes.Assets.at("video_player/video-js.swf")"</script>
+<title>Cambox</title>
+</head>
 
-  <body>
+<body>
+	<!-- Wrap all page content here -->
+	<div id="wrap">
+		<!-- Begin page content -->
+		<div class="top-nav-bar">
+			<ul class="navigation">
+				@if(!session.isEmpty()){ 
+					<p class="welcome-top-nav">Welcome, @session.get("email")!</p>
+				<li><a href="/mybox">My Box</a>
+					<ul>
+						<li><a href="/mybox/collection">My collection</a></li>
+						<li><a href="/categories">Categories</a></li>
+						<li><a href="/friends">Friend Boxes</a></li>
+						<li><a href="/messages">Messages</a></li>
+						<li><a href="/upload">Upload video</a></li>
+					</ul>
+					<div class="clear"></div></li>
+				<li><a href="/logout">Log out</a></li>
+				}else{
+				<p class="welcome-top-nav">Welcome, guest!</p>
+				<li><a href="/signup">Sign up</a></li>
+				<li><a href="/login">Log in</a></li>
+			}
+			</ul>
+			<div class="clear-fix"></div>
+		</div>
+		<div class="page-header">
+			<h1><a href="/" class="header-link">Cambox!</a></h1>
+		</div>
+		<div id="content-wrapper">@content</div>
+	</div>
 
-    <!-- Wrap all page content here -->
-    <div id="wrap">
+	<div id="footer">
+		<h2>©2013 CAMBOX</h2>
+	</div>
 
-      <!-- Begin page content -->
-        <div class="page-header">
-          <h1>Cambox!</h1>
-        </div>
-        <div id="content-wrapper">
-        	@content
-        </div>
-      </div>
-
-    <div id="footer">
-      	<h2>Here will be some cool footer!</h2>
-    </div>
-
-  </body>
+</body>
 </html>

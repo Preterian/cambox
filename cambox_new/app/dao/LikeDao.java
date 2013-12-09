@@ -1,0 +1,108 @@
+package dao;
+
+import java.util.List;
+
+import javax.persistence.Query;
+
+import models.Dislike;
+import models.Like;
+import models.User;
+import models.Video;
+import play.db.jpa.JPA;
+import play.db.jpa.Transactional;
+
+public class LikeDao {
+
+	@Transactional
+	public static boolean makeLike(String user, String video) {
+		Like newLike = null;
+		User tempUser = null;
+		Video tempVideo = null;
+		Query userQuery = JPA.em().createNamedQuery("User.findByName")
+				.setParameter("username", user);
+		Query videoQuery = JPA.em().createNamedQuery("Video.findByName")
+				.setParameter("name", video);
+		if (userQuery.getMaxResults() > 0 && videoQuery.getMaxResults() > 0) {
+			tempUser = (User) userQuery.getSingleResult();
+			tempVideo = (Video) videoQuery.getSingleResult();
+		}
+		if ((tempUser != null) && (tempVideo != null)) {
+			// tempVideo.setTimesLiked(tempVideo.getTimesLiked() + 1);
+			Query likeQuery = JPA.em()
+					.createNamedQuery("Like.findLikesByVideoId")
+					.setParameter("video", tempVideo);
+			List<Like> checkList = likeQuery.getResultList();
+			if (checkList.size() > 0) {
+				newLike = checkList.get(0);
+			}
+			if (newLike == null) {
+				newLike = new Like(tempUser, tempVideo);
+				JPA.em().persist(newLike);
+				return true;
+			} else {
+				JPA.em().remove(newLike);
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	@Transactional
+	public static boolean makeDisLike(String user, String video) {
+		Dislike dislike = null;
+		User tempUser = null;
+		Video tempVideo = null;
+		Query userQuery = JPA.em().createNamedQuery("User.findByName")
+				.setParameter("username", user);
+		Query videoQuery = JPA.em().createNamedQuery("Video.findByName")
+				.setParameter("name", video);
+		if (userQuery.getMaxResults() > 0 && videoQuery.getMaxResults() > 0) {
+			tempUser = (User) userQuery.getSingleResult();
+			tempVideo = (Video) videoQuery.getSingleResult();
+		}
+		if ((tempUser != null) && (tempVideo != null)) {
+			// tempVideo.setTimesLiked(tempVideo.getTimesLiked() + 1);
+			Query dislikeQuery = JPA.em()
+					.createNamedQuery("Dislike.findDisLikesByVideoId")
+					.setParameter("video", tempVideo);
+			List<Dislike> checkList = dislikeQuery.getResultList();
+			if (checkList.size() > 0) {
+				dislike = checkList.get(0);
+			}
+			if (dislike == null) {
+				dislike = new Dislike(tempUser, tempVideo);
+				JPA.em().persist(dislike);
+				return true;
+			} else {
+				JPA.em().remove(dislike);
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	@Transactional
+	public static List<Like> findLikesByVideoId(Video video) {
+		Query likeQuery = JPA.em().createNamedQuery("Like.findLikesByVideoId")
+				.setParameter("video", video);
+		List<Like> likes = likeQuery.getResultList();
+		return likes;
+	}
+
+	@Transactional
+	public static List<Dislike> findDisLikesByVideoId(Video video) {
+		Query dislikeQuery = JPA.em()
+				.createNamedQuery("Dislike.findDisLikesByVideoId")
+				.setParameter("video", video);
+		List<Dislike> dislikes = dislikeQuery.getResultList();
+		return dislikes;
+	}
+
+	@Transactional
+	public static void deleteLike(Like like) {
+		JPA.em().remove(like);
+	}
+
+}

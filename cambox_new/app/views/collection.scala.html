@@ -1,0 +1,23 @@
+@(videos: List[Video])
+
+@main(Html("Cambox")) { 
+<div id="videos_div">
+@for(video <- videos) {
+	<a href="@routes.VideoController.video(video.getVideoId().toString)" class="linkToVideo" style="text-decoration:none">
+		<div class="videoPreview">
+			<div class="previewImg">
+				<img src="@routes.Assets.at(video.getSmallPreviewUrl())"> <img
+					src="@routes.Assets.at("images/play_icon.png")" class="playIcon">
+			</div>
+
+			<p class="title">@video.getName()</p>
+			<p class="date">07.11.2013</p>
+
+		</div>
+	</a> 
+} 
+
+<div class="clear"></div>
+</div>
+}
+	

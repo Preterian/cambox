@@ -9,12 +9,17 @@ GET     /                           controllers.Application.index()
 GET     /signup                     controllers.SignUp.blank()
 POST    /signup                     controllers.SignUp.submit()
 
-#Sign up
-GET     /login                     controllers.Login.blank()
-POST    /login                     controllers.Login.submit()
+#Log in
+GET     /login                      controllers.Login.blank()
+POST    /login                      controllers.Login.authenticate()
+GET     /logout                     controllers.Login.logOut()
 
 #Video
-GET     /video/:id            controllers.Video.video(id:String)
+GET     /video/:id            		controllers.VideoController.video(id:String)
+
+#Profile
+GET     /mybox            			controllers.Application.myBox()
+GET     /mybox/collection           controllers.VideoController.collection()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -1,0 +1,38 @@
+@(user: User) @main(Html("Cambox")) {
+<head>
+<meta charset="utf-8">
+</head>
+<div id="wrapper-box">
+
+	<div id="user">
+		<p class="NameAndSurname">@user.getNameAndSurname()</p>
+		<div class="float-left">
+			<div id="avatar">
+				<img src="@routes.Assets.at("images/avatar.jpg")">
+			</div>
+		</div>
+
+		<div class="profile-nav float-left">
+			<ul>
+				<li class="no-margin-top"><a href="/mybox/collection">My collection</a></li>
+				<li><a href="/categories">Categories</a></li>
+				<li><a href="/friends">Friends boxes</a></li>
+				<li><a href="/messages">Messages</a></li>
+				<li><a href="/settings">Upload video</a></li>
+				<li><a href="/logout">Log out</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div class="user-info">
+		<h3>Account information</h3>
+		<ul class="user-info-list">
+			<li>Name: @user.getName()</li>
+			<li>Surname: @user.getSurname()</li>
+			<li>Age: @user.getAge()</li>
+			<li>Country: @user.getCountry</li>
+			<li>City: @user.getCity</li>
+		</ul>
+	</div>
+</div>
+}

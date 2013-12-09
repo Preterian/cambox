@@ -1,7 +1,66 @@
-@(id_video: Long)
+@(video: Video)
+
 
 @main(Html("Cambox")) { 
+	<head>
+		<meta charset="utf-8">
+	</head>
+<div id="mainDivPlayer">
 
-	<h1>Rendering video @id_video!</h1>
+      <div class="search-wrapper">
+      	<form action="/search.html" class="search-from">
+	        <input type="text" class="search-input"placeholder="Search video...">
+	        <button type="submit" class="search-submit">Search</button>
+      	</form>
+      </div>
+      
 
-}
+      <div class="player">
+        	<video class="video-js vjs-default-skin" controls preload="none" width="960" height="540"
+			      poster="@routes.Assets.at(video.getBigPreviewUrl())"
+			      data-setup="{}">
+			    <source src="@routes.Assets.at(video.getUrl())" type='video/mp4' />
+  			</video>
+      </div>
+
+      <div id="controlButtons">
+         <button type="button"><img src="@routes.Assets.at("images/icons/add.png")">Add to collection</button>
+         <button type="button"><img src="@routes.Assets.at("images/icons/like.png")">like it</button>
+         <button type="button"><img src="@routes.Assets.at("images/icons/dislike.png")">dislike it</button>
+
+         <ul id="list_info">
+            <li id="views">
+               <img src="@routes.Assets.at("images/icons/views.png")" class="icon">
+               <p id="views_count">@video.getViews()</p>
+            </li>
+
+            <li id="likes">
+               <img src="@routes.Assets.at("images/icons/heart.png")" class="icon">
+               <p id="likes_count">@video.getRate()</p>
+            </li>
+         </ul>
+
+         <p id="upload_date">13.04.2013</p>
+      </div>
+
+      <div id="descr_div">
+         <h2 id="title">@video.getName()</h2>
+
+         <p id="description">
+            @video.getDescription()
+         </p>
+      </div>
+
+      <div id="comments">
+         <h3 id="comments_count">0 Comments</h3>
+         <a id="link_to_form"href="#add_comment">Add a new comment</a>
+         <div class="clear"></div>
+         
+         <form action="add_comment.html" id="add_comment">
+            <p><textarea rows="10" cols="45" name="text" placeholder="Add a comment here..."></textarea></p>
+            <p><input type="submit" value="Send" id="submit_comment"></p>
+         </form>
+      </div>
+   </div>
+   
+   }
