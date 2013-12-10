@@ -26,7 +26,7 @@ import play.data.validation.Constraints.Required;
 @Table(name = "users")
 @NamedQueries({
 		@NamedQuery(name = "User.findByName", query = "SELECT c FROM User c WHERE c.username = :username"),
-		@NamedQuery(name = "User.findByEmail", query = "SELECT c FROM User c WHERE c.email = :email")})
+		@NamedQuery(name = "User.findByEmail", query = "SELECT c FROM User c WHERE c.email = :email") })
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +58,9 @@ public class User {
 	@Column(name = "question", nullable = true)
 	private String question;
 
+	@Column(name = "avatar", nullable = true)
+	private String avatar;
+
 	@Required
 	@Column(name = "email", nullable = true)
 	private String email;
@@ -75,10 +78,10 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Set<Dislike> dislikes;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Comment> comments;
 
-	@OneToMany(mappedBy = "userUploader", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "userUploader", fetch = FetchType.EAGER)
 	private Set<Video> videos;
 
 	public Set<Video> getVideos() {
@@ -86,7 +89,7 @@ public class User {
 	}
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", updatable = true, nullable = true)}, inverseJoinColumns = {@JoinColumn(name = "role_id", updatable = true, nullable = true)})
+	@JoinTable(name = "user_roles", joinColumns = { @JoinColumn(name = "user_id", updatable = true, nullable = true) }, inverseJoinColumns = { @JoinColumn(name = "role_id", updatable = true, nullable = true) })
 	private Set<Role> roleSet = new HashSet<Role>();
 
 	public User() {
@@ -109,8 +112,9 @@ public class User {
 		this.password = password;
 		this.registrationDate = new Date();
 	}
-	
-	public User(String username, String name, String surname, String email, String password){
+
+	public User(String username, String name, String surname, String email,
+			String password) {
 		this.username = username;
 		this.name = name;
 		this.surname = surname;
@@ -169,6 +173,14 @@ public class User {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public String getCity() {
@@ -255,9 +267,9 @@ public class User {
 		return name + " " + surname;
 	}
 
-	public static User authenticate(String email, String password) {	
+	public static User authenticate(String email, String password) {
 		User user = UserDao.findUserByEmail(email);
-		if(user.getPassword().equals(password)){
+		if (user.getPassword().equals(password)) {
 			return user;
 		}
 		return null;

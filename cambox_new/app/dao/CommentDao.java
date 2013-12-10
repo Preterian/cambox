@@ -14,8 +14,13 @@ import play.db.jpa.Transactional;
 public class CommentDao {
 
 	@Transactional
-	public static void addCommentToVideo(Comment comment) {
-		JPA.em().persist(comment);
+	public static void addCommentToVideo(final Comment comment) {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {		
+				JPA.em().persist(comment);
+			}
+		});
 	}
 
 	@Transactional

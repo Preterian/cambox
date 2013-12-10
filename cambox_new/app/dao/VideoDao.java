@@ -12,6 +12,8 @@ import play.db.jpa.Transactional;
 
 public class VideoDao {
 
+	static Video tempVideo = null;
+
 	@Transactional
 	public static List<Video> getVideosByCategories(String category) {
 		Query videoQuery = JPA.em().createNamedQuery("Video.findByCategory")
@@ -32,8 +34,23 @@ public class VideoDao {
 		Video tempVideo = null;
 		Query videoQuery = JPA.em().createNamedQuery("Video.findByName")
 				.setParameter("name", name);
-		if (videoQuery.getMaxResults() > 0)
+		if (videoQuery.getResultList().size() > 0)
 			tempVideo = (Video) videoQuery.getSingleResult();
+		return tempVideo;
+	}
+
+	@Transactional
+	public static Video findVideoByID(final int id) {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {				
+				Query videoQuery = JPA.em()
+						.createNamedQuery("Video.findByID")
+						.setParameter("videoId", id);
+				if (videoQuery.getResultList().size() > 0)
+					tempVideo = (Video) videoQuery.getSingleResult();
+			}
+		});
 		return tempVideo;
 	}
 

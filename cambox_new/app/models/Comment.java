@@ -25,11 +25,11 @@ public class Comment {
 	@Column(name = "comment", nullable = false)
 	private String comment;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "video_id")
 	private Video video;
 

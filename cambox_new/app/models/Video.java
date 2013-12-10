@@ -19,7 +19,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "video")
 @NamedQueries({
-		@NamedQuery(name = "Video.findByName", query = "SELECT c FROM Video c WHERE c.name = :name"),		
+		@NamedQuery(name = "Video.findByName", query = "SELECT c FROM Video c WHERE c.name = :name"),
+		@NamedQuery(name = "Video.findByID", query = "SELECT c FROM Video c WHERE c.videoId = :videoId"),
 		@NamedQuery(name = "Video.findByCategory", query = "SELECT c FROM Video c WHERE c.category = :category")})
 public class Video {
 
@@ -64,13 +65,13 @@ public class Video {
 	@Column(name = "uploadDate", nullable = true)
 	private Date uploadDate;
 
-	@OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "video", fetch = FetchType.EAGER)
 	private Set<Comment> comments;
 
-	@OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "video", fetch = FetchType.EAGER)
 	private Set<Like> likes;
 
-	@OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "video", fetch = FetchType.EAGER)
 	private Set<Dislike> dislikes;
 	
 	@ManyToOne

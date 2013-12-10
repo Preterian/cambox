@@ -24,11 +24,11 @@ public class Like {
 	@Column(name = "like_id", nullable = false)
 	private int like_id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "video_id")
 	private Video video;
 

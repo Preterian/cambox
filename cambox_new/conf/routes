@@ -20,6 +20,7 @@ GET     /video/:id            		controllers.VideoController.video(id:String)
 GET 	/upload						controllers.VideoController.index()
 POST	/upload						controllers.VideoController.uploadVideo()
 
+
 #Profile
 GET     /mybox            			controllers.Application.myBox()
 GET     /mybox/collection           controllers.VideoController.collection()
