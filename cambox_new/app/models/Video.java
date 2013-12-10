@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "video")
 @NamedQueries({
-		@NamedQuery(name = "Video.findByName", query = "SELECT c FROM Video c WHERE c.name = :name"),
+		@NamedQuery(name = "Video.findByName", query = "SELECT c FROM Video c WHERE c.name = :name"),		
 		@NamedQuery(name = "Video.findByCategory", query = "SELECT c FROM Video c WHERE c.category = :category")})
 public class Video {
 

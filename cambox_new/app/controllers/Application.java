@@ -24,7 +24,7 @@ public class Application extends Controller {
 
 	// TODO replace with real user from db
 	private static User getUserByEmail(String email) {
-		return UserDao.findUserByEmail(email); /*new User("Rostik", "Balagurak", 23, "Ukraine", "Lviv", "male",
-				"Doom4eg101", "lala", "admin@test.com", "1111");*/
+		return UserDao.findUserByEmail(email);
 	}
+		
 }

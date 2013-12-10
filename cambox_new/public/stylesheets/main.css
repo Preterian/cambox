@@ -50,6 +50,12 @@ html,body {
 	margin: 0 auto;
 }
 
+.header-box{
+	display: block;
+	float: right;
+	margin-right: 5%;
+}
+
 /* sign up form */
 #signup-form {
 	width: 700px;
@@ -386,6 +392,7 @@ input {
 }
 
 /* search */
+
 .search-wrapper {
 	margin: 40px auto;
 	width: 400px;

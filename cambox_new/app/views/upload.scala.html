@@ -1,0 +1,44 @@
+@(uploadForm: Form[Video])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main(Html("Cambox")) {
+	@helper.form(action = routes.VideoController.uploadVideo, 'id -> "upload-form", 'enctype -> "multipart/form-data") {
+       <fieldset>
+            <legend>Upload Video</legend>
+            
+            @inputText(
+                uploadForm("name"), 
+                '_label -> "Title", 
+                '_help -> "Please choose a valid title.",
+                '_error -> uploadForm.globalError
+            )
+            
+            @inputText(
+                uploadForm("category"), 
+                '_label -> "Category", 
+                '_help -> "Please choose a valid category.",
+                '_error -> uploadForm.globalError
+            )
+            
+            @inputText(
+                uploadForm("description"), 
+                '_label -> "Description", 
+                '_help -> "Please choose a valid description.",
+                '_error -> uploadForm.globalError
+            )
+          
+        </fieldset>
+        
+          <div id="img-upload-wrap">        	
+      		<input type="file" name="video"><br/>
+        	<span class="help-block">Only video files</span> 
+        </div>
+		
+        <input type="submit" value="Upload" class="submit-button">
+      
+	}
+
+
+}

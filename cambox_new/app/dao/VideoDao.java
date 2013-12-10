@@ -47,6 +47,20 @@ public class VideoDao {
 	}
 
 	@Transactional
+	public static void saveVideoByEmail(final Video video, final String email) {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				Query userQuery = JPA.em().createNamedQuery("User.findByEmail")
+						.setParameter("email", email);
+				User tempUser = (User) userQuery.getSingleResult();
+				video.setUserUploader(tempUser);
+				JPA.em().persist(video);
+			}
+		});
+	}
+
+	@Transactional
 	public static void deteleVideo(Video video) {
 		JPA.em().remove(video);
 	}
