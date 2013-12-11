@@ -78,14 +78,24 @@ public class VideoDao {
 	}
 
 	@Transactional
-	public static void deteleVideo(Video video) {
-		JPA.em().remove(video);
+	public static void deteleVideo(final Video video) {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				JPA.em().remove(video);
+			}
+		});
 	}
 
-	// Поки що не робочий
 	@Transactional
-	public static Video updateVideo(Video video) {
-		return JPA.em().merge(video);
+	public static Video updateVideo(final Video video) {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				tempVideo = JPA.em().merge(video);
+			}
+		});
+		return tempVideo;
 	}
 
 }

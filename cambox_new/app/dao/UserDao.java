@@ -84,4 +84,15 @@ public class UserDao {
 		JPA.em().remove(user);
 	}
 
+	@Transactional
+	public static User updateUser(final User user) {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				tempUser = JPA.em().merge(user);
+			}
+		});
+		return tempUser;
+	}
+	
 }

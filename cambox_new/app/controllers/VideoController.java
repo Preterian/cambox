@@ -76,9 +76,8 @@ public class VideoController extends Controller {
 
 				String category = uploadVideoForm.get().getCategory();
 				String title = uploadVideoForm.get().getName();
-				String path = "public/users/"
-						.concat(currentUserEmail).concat("/").concat("videos/")
-						.concat(category);
+				String path = "public/users/".concat(currentUserEmail)
+						.concat("/").concat("videos/").concat(category);
 
 				File file = filePart.getFile();
 				File theDir = new File(path);
@@ -94,7 +93,7 @@ public class VideoController extends Controller {
 				path = path.replace("public/", "");
 				Video video = new Video(title, category, uploadVideoForm.get()
 						.getDescription(), 0, path, new Date());
-				VideoDao.saveVideoByEmail(video, currentUserEmail);			
+				VideoDao.saveVideoByEmail(video, currentUserEmail);
 
 				return ok(mybox.render(UserDao
 						.findUserByEmail(currentUserEmail)));
@@ -161,6 +160,17 @@ public class VideoController extends Controller {
 		 * } catch (VideoNotFoundException e) { // TODO Auto-generated catch
 		 * block e.printStackTrace(); }
 		 */
+		
+		
+		/*User user2 = UserDao.findUserByName("lola");
+		user2.setAge(10000);
+		user2 = UserDao.updateUser(user2);
+		
+		videos.get(0).setName("1111");
+		
+		VideoDao.updateVideo(videos.get(0));*/
+		
+		
 		return videos;
 	}
 
@@ -188,7 +198,5 @@ public class VideoController extends Controller {
 	private static int safeLongToInt(long l) {
 		return Ints.checkedCast(l);
 	}
-
-	
 
 }
