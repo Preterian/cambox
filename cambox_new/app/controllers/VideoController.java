@@ -76,7 +76,7 @@ public class VideoController extends Controller {
 
 				String category = uploadVideoForm.get().getCategory();
 				String title = uploadVideoForm.get().getName();
-				String path = "public/".concat("users/")
+				String path = "public/users/"
 						.concat(currentUserEmail).concat("/").concat("videos/")
 						.concat(category);
 
@@ -91,6 +91,7 @@ public class VideoController extends Controller {
 				file.renameTo(new File(path));
 
 				System.err.println("FILENAME = " + fileName);
+				path = path.replace("public/", "");
 				Video video = new Video(title, category, uploadVideoForm.get()
 						.getDescription(), 0, path, new Date());
 				VideoDao.saveVideoByEmail(video, currentUserEmail);			
