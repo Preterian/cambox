@@ -33,7 +33,7 @@ public class Comment {
 	@JoinColumn(name = "video_id")
 	private Video video;
 
-	Comment() {
+	public Comment() {
 
 	}
 

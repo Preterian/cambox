@@ -14,6 +14,9 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+
+
+
 import com.google.common.primitives.Ints;
 
 import dao.CommentDao;
@@ -35,6 +38,10 @@ import views.html.*;
 
 public class VideoController extends Controller {
 
+	final static Form<Video> uploadVideoForm = form(Video.class);
+	static Form<Comment> commentsForm = form(Comment.class);
+	
+	
 	public static Result video(String video_id) {
 		// checking if id is correct
 		long id = 0;
@@ -44,18 +51,44 @@ public class VideoController extends Controller {
 			return badRequest(notFound.render(video_id));
 		}
 		try {
-			return ok(video.render(getVideoById(id)));
+			Video videoObj = getVideoById(id);
+			return ok(video.render(videoObj, CommentDao.getCommentsOfVideo(videoObj), commentsForm ));
+			//return ok(video.render(getVideoById(id)));
 		} catch (VideoNotFoundException e) {
 			return badRequest(notFound.render(video_id));
 		}
 	}
 
-	final static Form<Video> uploadVideoForm = form(Video.class);
-
 	public static Result index() {
 		return ok(upload.render(uploadVideoForm));
 	}
+	
+	// allowed only to authorized users
+	@Security.Authenticated(Secured.class)
+	public static Result addComment(int idd) throws VideoNotFoundException {
+				
+		final Form<Comment> commentForm = form(Comment.class).bindFromRequest();
+		if (commentForm.hasErrors()) {
+			System.err.println("Some errors occured while signUp");
+			System.err.println(commentForm.toString());
+			return badRequest();
+		} else {
+			System.err.println("Adding Comments!!!!!!!!!!");
+			Video videoObj = getVideoById(idd);
+			Comment comment = new Comment(commentForm.get().getComment(),
+					UserDao.findUserByEmail(session("email")), videoObj);
+						
+			videoObj.getComments().add(comment);
+			
+			CommentDao.addCommentToVideo(comment);	
+			 
+			return ok(video.render(videoObj, CommentDao.getCommentsOfVideo(videoObj), commentsForm ));
+		}
+	}
+	
 
+	// allowed only to authorized users
+	@Security.Authenticated(Secured.class)
 	public static Result uploadVideo() {
 		String currentUserEmail = session().get("email");
 
@@ -107,6 +140,7 @@ public class VideoController extends Controller {
 
 	}
 
+	
 	@Security.Authenticated(Secured.class)
 	public static Result collection() {
 		String currentUserEmail = session().get("email");
@@ -165,31 +199,29 @@ public class VideoController extends Controller {
 		/*User user2 = UserDao.findUserByName("lola");
 		user2.setAge(10000);
 		user2 = UserDao.updateUser(user2);
+	
+		videos.get(0).setName("revolution");
+		videos.get(0).setViews(10); */
 		
-		videos.get(0).setName("1111");
-		
-		VideoDao.updateVideo(videos.get(0));*/
+	//	VideoDao.updateVideo(videos.get(0));
 		
 		
 		return videos;
 	}
 
-	// TODO replace with real video from db
-	private static Video getVideoById(long id) throws VideoNotFoundException {
-		/*
-		 * if (id == 1) { Video video = new Video("Yosemite HD", "Funny",
-		 * "This whole ", 34535, 345, "videos/1.mp4", "videos/1.jpg",
-		 * "videos/big1.jpg"); video.setVideoId((int) id); return video; }
-		 * 
-		 * else if (id == 2) { Video video = new Video("Yosemite HD", "Funny",
-		 * "This whole ", 34535, 345, "videos/2.mp4", "videos/2.jpg",
-		 * "videos/big2.jpg"); video.setVideoId((int) id); return video; } else
-		 * if (id == 3) { Video video = new Video("Yosemite HD", "Funny",
-		 * "This who", 34535, 345, "videos/3.mp4", "videos/3.jpg",
-		 * "videos/big3.jpg"); video.setVideoId((int) id); return video; }
-		 */
+	/*
+	 * Returns Video object by it's id after incrementing it's views amount 
+	 * @param long id - video's id
+	 * @return video by it's id
+	 */
+	private static Video getVideoById(long id) throws VideoNotFoundException {		
 		Video video = VideoDao.findVideoByID(safeLongToInt(id));
 		if (video != null) {
+			//incrementing and updating vieas amount
+			int views = video.getViews();			
+			views++;
+			video.setViews(views);
+			VideoDao.updateVideo(video);			
 			return video;
 		} else
 			throw new VideoNotFoundException();

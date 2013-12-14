@@ -18,7 +18,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "video")
-@NamedQueries({
+@NamedQueries({	
+		@NamedQuery(name = "Video.findVideoLike", query = "SELECT c FROM Video c WHERE (lower(c.name) LIKE ('%' || lower(:name) || '%')) or (lower(c.description) like ('%' || lower(:description) || '%'))"),
+		@NamedQuery(name = "Video.findAllVideo", query = "SELECT c FROM Video c"),
 		@NamedQuery(name = "Video.findByName", query = "SELECT c FROM Video c WHERE c.name = :name"),
 		@NamedQuery(name = "Video.findByID", query = "SELECT c FROM Video c WHERE c.videoId = :videoId"),
 		@NamedQuery(name = "Video.findByCategory", query = "SELECT c FROM Video c WHERE c.category = :category")})

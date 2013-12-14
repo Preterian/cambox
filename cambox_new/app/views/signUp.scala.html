@@ -1,4 +1,4 @@
-@(signupForm: Form[User])
+@(message: String, signupForm: Form[User])
 
 
 @import helper._
@@ -9,6 +9,10 @@
         
         <fieldset>
             <legend>Sign up</legend>
+        
+            <div class="error-msg">
+            	<h2>@message</h2>
+            </div>        
             
             @inputText(
                 signupForm("username"), 

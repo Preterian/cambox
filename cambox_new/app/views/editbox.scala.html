@@ -1,0 +1,51 @@
+@(user: User)(editUserForm: Form[User])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main(Html("Cambox")) {
+<head>
+<meta charset="utf-8">
+</head>
+<div id="wrapper-box">
+
+	@helper.form(action = routes.UserController.submit, 'id -> "edit-box", 'enctype -> "multipart/form-data") {
+	<div id="user">
+		<p class="NameAndSurname">@user.getNameAndSurname()</p>
+		<div class="float-left">
+			<div id="avatar">
+				<img src="@routes.Assets.at("images/avatar.jpg")">
+			</div>			
+		</div>
+		
+		
+		
+	</div>
+	<div class="clear"></div>
+	
+	<div class="user-info">
+		<h3>Account information</h3>
+		<ul class="user-info-list">
+		
+			<li>User name: <input type="text" name="username" id="username" value="@user.getUsername()" size="35px"></li>
+			<li>Password: <input type="text" name="password" id="password" value="@user.getPassword()"></li>						
+			<li>Name: <input type="text" name="name" id="name" value="@user.getName()"></li>
+			<li>Surname: <input type="text" name="surname" id="surname" value="@user.getSurname()"></li>
+			<li>Email: <input type ="text" name="email" id="email" value="@user.getEmail()" ></li>
+			<li>Age: <input type="text" name="age" id="age" value="@user.getAge()"></li>
+			<li>Country: <input type="text" name="country" id="country" value="@user.getCountry"></li>
+			<li>City: <input type="text" name="city" id="city" value="@user.getCity"></li>
+			<li>Gender:
+			<select name="gender" id="gender" >				
+  				<option value="male">Male</option>
+  				<option value="female">Female</option>
+			</select>
+			</li>
+			
+		</ul>
+		<input type="submit" value="Done editing" class="submit-upload">
+	</div>	
+	
+	}
+</div>
+}

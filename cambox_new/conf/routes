@@ -9,6 +9,13 @@ GET     /                           controllers.Application.index()
 GET     /signup                     controllers.SignUp.blank()
 POST    /signup                     controllers.SignUp.submit()
 
+#Search
+GET 	/search       controllers.Application.search()
+
+#EditBox
+GET		/editbox					controllers.UserController.editUser()
+POST    /editbox					controllers.UserController.submit()
+
 #Log in
 GET     /login                      controllers.Login.blank()
 POST    /login                      controllers.Login.authenticate()
@@ -16,6 +23,7 @@ GET     /logout                     controllers.Login.logOut()
 
 #Video
 GET     /video/:id            		controllers.VideoController.video(id:String)
+POST	/video/:id					controllers.VideoController.addComment(id:Integer)
 
 GET 	/upload						controllers.VideoController.index()
 POST	/upload						controllers.VideoController.uploadVideo()

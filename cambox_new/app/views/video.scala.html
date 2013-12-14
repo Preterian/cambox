@@ -1,30 +1,24 @@
-@(video: Video)
+@(video: Video, comments: List[Comment], commentsForm: Form[Comment])
 
 @import helper._
 
 @main(Html("Cambox")) { 
 	<head>
-		<meta charset="utf-8">
+		<meta charset="utf-8">	  	 
 	</head>
 <div id="mainDivPlayer">
 
-      <div class="search-wrapper">
-      	<form action="/search.html" class="search-from">
-	        <input type="text" class="search-input"placeholder="Search video...">
-	        <button type="submit" class="search-submit">Search</button>
-      	</form>
-      </div>
-
+<div class="clear"></div>
       <div class="player">
         	<video class="video-js vjs-default-skin" controls preload="none" width="960" height="540"
-			      poster="@routes.Assets.at(video.getBigPreviewUrl())"
+			      poster="@routes.Assets.at("images/play_icon.png")"
 			      data-setup="{}">
 			    <source src="@routes.Assets.at(video.getUrl())" type='video/mp4' />			    
   			</video>
       </div>
 
-      <div id="controlButtons">
-         <button type="button"><img src="@routes.Assets.at("images/icons/add.png")">Add to collection</button>
+      <div id="controlButtons">      
+         <button type="button"><img src="@routes.Assets.at("images/icons/add.png")">Add to collection</button>      
          <button type="button"><img src="@routes.Assets.at("images/icons/like.png")">like it</button>
          <button type="button"><img src="@routes.Assets.at("images/icons/dislike.png")">dislike it</button>
 
@@ -52,16 +46,49 @@
       </div>
 
       <div id="comments">
-         <h3 id="comments_count">0 Comments</h3>
-         <a id="link_to_form"href="#add_comment">Add a new comment</a>
+         
+         
+         <h2 id="comments_count">@comments.size() Comments</h2> 
+         <br>   
+         <br>
+    		<ul>
+        		@for(comm <- comments) {
+            		<li>
+            			<h4>@comm.getUser.getUsername</h4>
+                		<h5>@comm.getComment</h5>
+                		<hr>                		
+            		</li>
+        		}
+    		</ul>
+        
+        
          <div class="clear"></div>
+      
+       @form(routes.VideoController.addComment(video.getVideoId), 'id -> "add_comment") {        
+        	<p><textarea rows="10" cols="45" name="comment" id="comment" placeholder="Add a comment here..."></textarea></p>
         
+        	<input type="submit" value="Add comment" id="submit_comment">
+           }  
+      
         
-         <form action="" id="add_comment">
-            <p><textarea rows="10" cols="45" name="text" placeholder="Add a comment here..."></textarea></p>
-            <p><input type="submit" value="Send" id="submit_comment"></p>
-         </form>
       </div>
-   </div>
+       
+      
+  </div>     
+  
+  <script type="text/javascript" charset="utf-8">
+    $(function() {         
+        // Expose the form 
+        $('form').click(function() { 
+            $('form').expose({api: true}).load(); 
+        }); 
+        
+        // If there is an error, focus to form
+        if($('form .error').size()) {
+            $('form').expose({api: true, loadSpeed: 0}).load(); 
+            $('form input[type=text]').get(0).focus();
+        }
+    });
+</script>
    
    }

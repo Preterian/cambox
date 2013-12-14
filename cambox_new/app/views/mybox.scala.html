@@ -8,8 +8,14 @@
 		<p class="NameAndSurname">@user.getNameAndSurname()</p>
 		<div class="float-left">
 			<div id="avatar">
-				<img src="@routes.Assets.at("images/avatar.jpg")">
+				@if(routes.Assets.at(user.getAvatar())==null) {
+					<img alt="avatar" src="@routes.Assets.at(user.getAvatar())">
+				}else{
+					<img src="@routes.Assets.at("images/avatar.jpg")">
+				}
 			</div>
+			<br>					
+			<a href="/editbox" id="submit_comment">Edit account</a>							
 		</div>
 
 		<div class="profile-nav float-left">

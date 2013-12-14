@@ -25,6 +25,7 @@ import play.data.validation.Constraints.Required;
 @Entity
 @Table(name = "users")
 @NamedQueries({
+		@NamedQuery(name = "User.findByID", query = "SELECT c FROM User c WHERE c.userId = :userId"),
 		@NamedQuery(name = "User.findByName", query = "SELECT c FROM User c WHERE c.username = :username"),
 		@NamedQuery(name = "User.findByEmail", query = "SELECT c FROM User c WHERE c.email = :email") })
 public class User {
@@ -32,7 +33,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id", nullable = false)
 	private int userId;
-
+	
 	@Column(name = "name", nullable = true)
 	private String name;
 
@@ -51,7 +52,7 @@ public class User {
 
 	@Column(name = "gender", nullable = true)
 	private String gender;
-
+	
 	@Column(name = "username", nullable = false)
 	private String username;
 
@@ -269,7 +270,7 @@ public class User {
 
 	public static User authenticate(String email, String password) {
 		User user = UserDao.findUserByEmail(email);
-		if (user.getPassword().equals(password)) {
+		if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
 			return user;
 		}
 		return null;

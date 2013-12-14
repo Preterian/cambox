@@ -24,12 +24,13 @@ public class SignUp extends Controller {
 	 * Defines a form wrapping the User class.
 	 */
 	final static Form<User> signupForm = form(User.class);
+	static String message = null;
 
 	/**
 	 * Display a blank form.
 	 */
 	public static Result blank() {
-		return ok(signUp.render(signupForm));
+		return ok(signUp.render(message, signupForm));
 	}
 
 	public static Result submit() {
@@ -38,7 +39,7 @@ public class SignUp extends Controller {
 		if (signUpForm.hasErrors()) {
 			System.err.println("Some errors occured while signUp");
 			System.err.println(signUpForm.toString());
-			return badRequest(signUp.render(signUpForm));
+			return badRequest(signUp.render(message, signUpForm));
 		} else {
 			try {
 				final String email = signUpForm.get().getEmail();
@@ -78,12 +79,15 @@ public class SignUp extends Controller {
 					return redirect(routes.Application.myBox());
 
 				} else {
-					System.err.println("Uer already exist!!!!!!!!!!!!");
-					return ok(signUp.render(signupForm));
+					System.err.println("Uer already exist!!!!!!!!!!!!ElSE");
+					//flash("success", "Uer already exist!");
+					message = "User already exist!";
+					return forbidden(signUp.render(message, signupForm));
 				}
 			} catch (NoResultException e) {
-				System.err.println("Uer already exist!!!!!!!!!!!!");
-				return ok(signUp.render(signupForm));
+				System.err.println("Uer already exist!!!!!!!!!!!!CATVH");
+				message = e.toString();
+				return forbidden(signUp.render(message, signupForm));
 			}
 
 		}
