@@ -16,8 +16,6 @@ import views.html.*;
 
 public class Application extends Controller {
 
-	// allowed only to authorized users
-	@Security.Authenticated(Secured.class)
 	public static Result index() {
 		return ok(index.render(VideoDao.getAllVideos()));
 		//return ok(index.render(session("email")));

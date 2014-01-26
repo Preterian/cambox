@@ -1,4 +1,4 @@
-@(video: Video, comments: List[Comment], commentsForm: Form[Comment])
+@(video: Video, comments: List[Comment], commentsForm: Form[Comment], relatedVideos:List[Video])
 
 @import helper._
 
@@ -17,11 +17,21 @@
   			</video>
       </div>
 
-      <div id="controlButtons">      
-         <button type="button"><img src="@routes.Assets.at("images/icons/add.png")">Add to collection</button>      
-         <button type="button"><img src="@routes.Assets.at("images/icons/like.png")">like it</button>
-         <button type="button"><img src="@routes.Assets.at("images/icons/dislike.png")">dislike it</button>
-
+      <div id="controlButtons">
+		@if(session.get("email") != video.getUserUploader().getEmail()){
+		<button type="button" id="addVideoToCollection">
+			<img src="@routes.Assets.at("images/icons/add.png")">Add to	collection
+		</button>
+		}
+		<button type="button" id="likeButton"><img src="@routes.Assets.at("images/icons/like.png")">like it</button>
+         <button type="button" id="disLikeButton"><img src="@routes.Assets.at("images/icons/dislike.png")">dislike it</button>
+         
+        @if(session.get("email") == "bogdan.ustyak@gmail.com"){		
+			<a href="/editvideo"  id="submit_comment">Edit Video</a>		
+		}
+         
+         @video.getUserUploader().getUsername()
+         
          <ul id="list_info">
             <li id="views">
                <img src="@routes.Assets.at("images/icons/views.png")" class="icon">
@@ -72,23 +82,77 @@
       
         
       </div>
-       
-      
-  </div>     
+
+	<div id="videos_div">
+		@for(relVideo <- relatedVideos) { <a
+			href="@routes.VideoController.video(relVideo.getVideoId().toString)"
+			class="linkToVideo" style="text-decoration: none">
+			<div class="videoPreview">
+				<div class="previewImg">
+					<img src="@routes.Assets.at(relVideo.getSmallPreviewUrl())"> <img
+						src="@routes.Assets.at(" images/play_icon.png")" class="playIcon">
+				</div>
+
+				<p class="title">@relVideo.getName()</p>
+				<p class="date">@relVideo.getUploadDate()</p>
+				<p class="date">@relVideo.getDescription()</p>
+
+			</div>
+		</a>
+		
+		 }
+	</div>
+
+
+</div>     
   
-  <script type="text/javascript" charset="utf-8">
-    $(function() {         
-        // Expose the form 
-        $('form').click(function() { 
-            $('form').expose({api: true}).load(); 
-        }); 
-        
-        // If there is an error, focus to form
-        if($('form .error').size()) {
-            $('form').expose({api: true, loadSpeed: 0}).load(); 
-            $('form input[type=text]').get(0).focus();
-        }
-    });
-</script>
+  <script type="text/javascript">
+
+  $('#likeButton').click(function(e) {
+	    $.ajax({
+	        type : 'GET',
+	        url : '@routes.VideoController.likeVideo()',
+	        data : {
+	           
+	        },
+	        success : function(data) {
+	        	$("#likes_count").text(@video.getViews());
+	        }
+	    });
+	    return false;
+	});
+
+	 $('#disLikeButton').click(function(e) {
+		 alert("lola");
+		    $.ajax({
+		        type : 'GET',
+		        url : '@routes.VideoController.disLikeVideo()',
+		        data : {
+		           
+		        },
+		        success : function(data) {
+		        	$("#likes_count").text(@video.getViews());
+		        }
+		    });
+		    return false;
+		});
+
+	 $('#addVideoToCollection').click(function(e) {	
+		 console.log(/video/@video.getVideoId);	
+		    $.ajax({
+		        type : 'GET',
+		        url : '/addvideotocollection',
+		        data : {
+		        	link: /video/@video.getVideoId;
+		        },
+		        success : function(data) {
+		        	alert("Video sucessfuly added to collection");
+		        }
+		    });
+		    return false;
+		});
+
+	  
+  </script>
    
    }

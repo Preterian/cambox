@@ -13,39 +13,48 @@ import play.db.jpa.Transactional;
 
 public class LikeDao {
 
+	private static boolean result = false;
 	@Transactional
-	public static boolean makeLike(String user, String video) {
-		Like newLike = null;
-		User tempUser = null;
-		Video tempVideo = null;
-		Query userQuery = JPA.em().createNamedQuery("User.findByName")
-				.setParameter("username", user);
-		Query videoQuery = JPA.em().createNamedQuery("Video.findByName")
-				.setParameter("name", video);
-		if (userQuery.getMaxResults() > 0 && videoQuery.getMaxResults() > 0) {
-			tempUser = (User) userQuery.getSingleResult();
-			tempVideo = (Video) videoQuery.getSingleResult();
-		}
-		if ((tempUser != null) && (tempVideo != null)) {
-			// tempVideo.setTimesLiked(tempVideo.getTimesLiked() + 1);
-			Query likeQuery = JPA.em()
-					.createNamedQuery("Like.findLikesByVideoId")
-					.setParameter("video", tempVideo);
-			List<Like> checkList = likeQuery.getResultList();
-			if (checkList.size() > 0) {
-				newLike = checkList.get(0);
+	public static boolean makeLike(final String user, final String video) {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				Like newLike = null;
+				User tempUser = null;
+				Video tempVideo = null;
+				Query userQuery = JPA.em().createNamedQuery("User.findByName")
+						.setParameter("username", user);
+				Query videoQuery = JPA.em()
+						.createNamedQuery("Video.findByName")
+						.setParameter("name", video);
+				if (userQuery.getResultList().size() > 0
+						&& videoQuery.getResultList().size() > 0) {
+					tempUser = (User) userQuery.getSingleResult();
+					tempVideo = (Video) videoQuery.getSingleResult();
+				}
+				if ((tempUser != null) && (tempVideo != null)) {
+					// tempVideo.setTimesLiked(tempVideo.getTimesLiked() + 1);
+					Query likeQuery = JPA.em()
+							.createNamedQuery("Like.findLikesByVideoId")
+							.setParameter("video", tempVideo);
+					List<Like> checkList = likeQuery.getResultList();
+					if (checkList.size() > 0) {
+						newLike = checkList.get(0);
+					}
+					if (newLike == null) {
+						newLike = new Like(tempUser, tempVideo);
+						JPA.em().persist(newLike);
+						result = true;
+					} else {
+						JPA.em().remove(newLike);
+						result = false;
+					}
+				} else {
+					result = false;
+				}
 			}
-			if (newLike == null) {
-				newLike = new Like(tempUser, tempVideo);
-				JPA.em().persist(newLike);
-				return true;
-			} else {
-				JPA.em().remove(newLike);
-				return false;
-			}
-		} else {
-			return false;
-		}
+		});
+		return result;
 	}
 
 	@Transactional

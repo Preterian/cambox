@@ -10,7 +10,7 @@ GET     /signup                     controllers.SignUp.blank()
 POST    /signup                     controllers.SignUp.submit()
 
 #Search
-GET 	/search       controllers.Application.search()
+GET 	/search      			    controllers.Application.search()
 
 #EditBox
 GET		/editbox					controllers.UserController.editUser()
@@ -24,6 +24,16 @@ GET     /logout                     controllers.Login.logOut()
 #Video
 GET     /video/:id            		controllers.VideoController.video(id:String)
 POST	/video/:id					controllers.VideoController.addComment(id:Integer)
+
+GET 	/video/					controllers.VideoController.likeVideo()
+GET     /video/					controllers.VideoController.disLikeVideo()
+
+GET  	/editvideo							controllers.VideoController.editVideo()
+POST 	/deletevideo							controllers.VideoController.submitDelete()
+POST 	/editvideo							controllers.VideoController.submitEdit()
+
+#Add video to user on collection page
+GET     /addvideotocollection						controllers.VideoController.addVideoToUsersCollection(link: String)
 
 GET 	/upload						controllers.VideoController.index()
 POST	/upload						controllers.VideoController.uploadVideo()

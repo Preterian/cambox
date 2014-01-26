@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   "org.hibernate" % "hibernate-core" % "4.1.7.Final",
   "mysql" % "mysql-connector-java" % "5.1.9",
   "org.apache.directory.api" % "api-all" % "1.0.0-M14"
-)     
+)   
+
 
 play.Project.playJavaSettings

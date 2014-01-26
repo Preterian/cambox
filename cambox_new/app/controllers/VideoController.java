@@ -2,6 +2,7 @@ package controllers;
 
 import static play.data.Form.form;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,10 +13,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FileUtils;
-
-
-
+import org.jcodec.api.FrameGrab;
+import org.jcodec.api.JCodecException;
 
 import com.google.common.primitives.Ints;
 
@@ -27,6 +29,7 @@ import exceptions.VideoNotFoundException;
 import models.*;
 import views.*;
 import play.*;
+import play.libs.*;
 import play.api.templates.Html;
 import play.data.Form;
 import play.db.jpa.JPA;
@@ -40,10 +43,11 @@ public class VideoController extends Controller {
 
 	final static Form<Video> uploadVideoForm = form(Video.class);
 	static Form<Comment> commentsForm = form(Comment.class);
-	
-	
+	static String videoID = null;	
+
 	public static Result video(String video_id) {
 		// checking if id is correct
+		videoID = video_id;
 		long id = 0;
 		try {
 			id = Long.parseLong(video_id);
@@ -52,8 +56,11 @@ public class VideoController extends Controller {
 		}
 		try {
 			Video videoObj = getVideoById(id);
-			return ok(video.render(videoObj, CommentDao.getCommentsOfVideo(videoObj), commentsForm ));
-			//return ok(video.render(getVideoById(id)));
+			incViews(videoObj);
+			String phrase = videoObj.getName();
+			return ok(video.render(videoObj,
+					CommentDao.getCommentsOfVideo(videoObj), commentsForm, VideoDao.getVideosForSearchPhrase(phrase)));
+			// return ok(video.render(getVideoById(id)));
 		} catch (VideoNotFoundException e) {
 			return badRequest(notFound.render(video_id));
 		}
@@ -62,11 +69,11 @@ public class VideoController extends Controller {
 	public static Result index() {
 		return ok(upload.render(uploadVideoForm));
 	}
-	
+
 	// allowed only to authorized users
 	@Security.Authenticated(Secured.class)
 	public static Result addComment(int idd) throws VideoNotFoundException {
-				
+
 		final Form<Comment> commentForm = form(Comment.class).bindFromRequest();
 		if (commentForm.hasErrors()) {
 			System.err.println("Some errors occured while signUp");
@@ -77,15 +84,16 @@ public class VideoController extends Controller {
 			Video videoObj = getVideoById(idd);
 			Comment comment = new Comment(commentForm.get().getComment(),
 					UserDao.findUserByEmail(session("email")), videoObj);
-						
+
 			videoObj.getComments().add(comment);
-			
-			CommentDao.addCommentToVideo(comment);	
-			 
-			return ok(video.render(videoObj, CommentDao.getCommentsOfVideo(videoObj), commentsForm ));
+
+			CommentDao.addCommentToVideo(comment);
+
+			String phrase = videoObj.getName();
+			return ok(video.render(videoObj,
+					CommentDao.getCommentsOfVideo(videoObj), commentsForm, VideoDao.getVideosForSearchPhrase(phrase)));
 		}
 	}
-	
 
 	// allowed only to authorized users
 	@Security.Authenticated(Secured.class)
@@ -112,6 +120,7 @@ public class VideoController extends Controller {
 				String path = "public/users/".concat(currentUserEmail)
 						.concat("/").concat("videos/").concat(category);
 
+				String videoImagesPath = path.concat("/preview.png");
 				File file = filePart.getFile();
 				File theDir = new File(path);
 				if (!theDir.exists()) {
@@ -122,10 +131,22 @@ public class VideoController extends Controller {
 						.concat(fileName);
 				file.renameTo(new File(path));
 
+				try {
+					int frameNumber = 150;
+					BufferedImage frame = FrameGrab.getFrame(new File("path"),
+							frameNumber);
+					ImageIO.write(frame, "png", new File(videoImagesPath));
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (JCodecException e1) {
+					e1.printStackTrace();
+				}
 				System.err.println("FILENAME = " + fileName);
 				path = path.replace("public/", "");
 				Video video = new Video(title, category, uploadVideoForm.get()
 						.getDescription(), 0, path, new Date());
+				video.setBigPreviewUrl(videoImagesPath);
 				VideoDao.saveVideoByEmail(video, currentUserEmail);
 
 				return ok(mybox.render(UserDao
@@ -140,7 +161,6 @@ public class VideoController extends Controller {
 
 	}
 
-	
 	@Security.Authenticated(Secured.class)
 	public static Result collection() {
 		String currentUserEmail = session().get("email");
@@ -194,41 +214,170 @@ public class VideoController extends Controller {
 		 * } catch (VideoNotFoundException e) { // TODO Auto-generated catch
 		 * block e.printStackTrace(); }
 		 */
-		
-		
-		/*User user2 = UserDao.findUserByName("lola");
-		user2.setAge(10000);
-		user2 = UserDao.updateUser(user2);
-	
-		videos.get(0).setName("revolution");
-		videos.get(0).setViews(10); */
-		
-	//	VideoDao.updateVideo(videos.get(0));
-		
-		
+
+		/*
+		 * User user2 = UserDao.findUserByName("lola"); user2.setAge(10000);
+		 * user2 = UserDao.updateUser(user2);
+		 * 
+		 * videos.get(0).setName("revolution"); videos.get(0).setViews(10);
+		 */
+
+		// VideoDao.updateVideo(videos.get(0));
+
 		return videos;
 	}
 
 	/*
-	 * Returns Video object by it's id after incrementing it's views amount 
+	 * Returns Video object by it's id after incrementing it's views amount
+	 * 
 	 * @param long id - video's id
+	 * 
 	 * @return video by it's id
 	 */
-	private static Video getVideoById(long id) throws VideoNotFoundException {		
+	private static Video getVideoById(long id) throws VideoNotFoundException {
 		Video video = VideoDao.findVideoByID(safeLongToInt(id));
 		if (video != null) {
-			//incrementing and updating vieas amount
-			int views = video.getViews();			
-			views++;
-			video.setViews(views);
-			VideoDao.updateVideo(video);			
 			return video;
 		} else
 			throw new VideoNotFoundException();
+	}
+
+	private static void incViews(Video video) {
+		// incrementing and updating vieas amount
+		int views = video.getViews();
+		views++;
+		video.setViews(views);
+		VideoDao.updateVideo(video);
 	}
 
 	private static int safeLongToInt(long l) {
 		return Ints.checkedCast(l);
 	}
 
+	// TODO Need to replace incViews with makeVideo Like
+	public static Result likeVideo() {
+		try {
+			System.err.println("Trying to make Like for Video!!!");
+
+			long id = 0;
+			try {
+				id = Long.parseLong(videoID);
+			} catch (NumberFormatException e) {
+				return badRequest(notFound.render(videoID));
+			}
+
+			Video videoObj = getVideoById(id);
+			incViews(videoObj);
+
+			// LikeDao.makeLike(UserDao.findUserByEmail(session("email")).getUsername(),
+			// getVideoById(Long.parseLong(videoID)).getName() );
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (VideoNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ok();
+	}
+
+	// TODO Need to replace incViews with makeVideo Like
+	public static Result disLikeVideo() {
+		System.err.println("Trying to make disLike for Video!!!");
+		try {
+		
+
+			long id = 0;
+			try {
+				id = Long.parseLong(videoID);
+			} catch (NumberFormatException e) {
+				return badRequest(notFound.render(videoID));
+			}
+
+			Video videoObj = getVideoById(id);
+			incViews(videoObj);
+
+			// LikeDao.makeLike(UserDao.findUserByEmail(session("email")).getUsername(),
+			// getVideoById(Long.parseLong(videoID)).getName() );
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (VideoNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ok();
+	}
+
+	public static Result addVideoToUsersCollection(String link) throws NumberFormatException, VideoNotFoundException{
+		StringBuilder id = new StringBuilder();
+		int len = link.length()-1;
+		char c = link.charAt(len);
+		for(int i = len-1; c!= '/'; i--){			
+			id.append(c);
+			c = link.charAt(i);
+		}
+		
+		System.err.println("======"+ link);		
+		id= id.reverse();
+				
+		System.err.println("======"+ id);
+		//Video video = getVideoById(Long.parseLong(id.toString()));
+		//UserDao.addVideoToUser(video, UserDao.findUserByEmail(session("email")));
+		System.err.println("need to add video to user");
+		return ok();
+	}
+
+	public static Result editVideo(){			
+		return ok(editvideo.render(genVideo(), editVideoForm));		
+	}
+	
+	
+	
+	public static Result submitDelete(){
+		System.err.println("===============Trying to delete video");		
+		return TODO;
+	}
+	
+	
+	public static Result submitEdit(){
+		System.err.println("===============Trying to edit video");
+		editVideoForm = form(Video.class).bindFromRequest();
+		
+		Video videoObj = genVideo();
+		
+		if (editVideoForm.hasErrors()) {
+			System.err.println("Some errors occured while editing");
+			System.err.println(editVideoForm.toString());			
+			return badRequest(editvideo.render(videoObj, editVideoForm));
+		} else {
+			 videoObj.setName( editVideoForm.get().getName() );
+			 videoObj.setDescription( editVideoForm.get().getDescription());
+			 
+			 VideoDao.updateVideo(videoObj);
+		}
+		return ok(editvideo.render(genVideo(), editVideoForm));
+	}
+	
+	static Form<Video> editVideoForm = form(Video.class);
+	
+	
+	private static Video genVideo(){
+		try {			
+			long id = 0;
+			try {
+				id = Long.parseLong(videoID);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+						
+			return getVideoById(id); 
+		} catch (NumberFormatException e) {			
+			e.printStackTrace();
+		} catch (VideoNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

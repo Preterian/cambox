@@ -1,0 +1,43 @@
+@(video: Video)(editVideoForm: Form[Video])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main(Html("Cambox")) {
+<head>
+<meta charset="utf-8">
+</head>
+<div id="mainDivPlayer">
+
+ <div class="player">
+        	<video class="video-js vjs-default-skin" controls preload="none" width="960" height="540"
+			      poster="@routes.Assets.at("images/play_icon.png")"
+			      data-setup="{}">
+			    <source src="@routes.Assets.at(video.getUrl())" type='video/mp4' />			    
+  			</video>
+      </div>
+
+
+	@helper.form(action = routes.VideoController.submitDelete, 'id -> "delete-video", 'enctype -> "multipart/form-data") {
+		<input type="submit" value="Delete Video" class="submit-upload">
+	}
+	
+	<div class = "clear"></div>
+
+	@helper.form(action = routes.VideoController.submitEdit, 'id -> "edit-video", 'enctype -> "multipart/form-data") {
+	
+	<div class="user-info">
+		
+		<h3>Video information</h3>
+		<ul class="user-info-list">
+		
+			<li>Video title: <input type="text" name="name" id="name" value="@video.getName()" ></li>
+			<li>Description: <textarea rows="10" cols="45" name="description" id="description" >@video.getDescription()</textarea></li>
+			
+		</ul>
+		<input type="submit" value="Done editing" class="submit-upload">
+	</div>	
+	
+	}
+</div>
+}

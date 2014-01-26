@@ -42,7 +42,8 @@ public class UserController extends Controller {
 				if (tmpUser != null) {
 					System.err.println("Editing user!!!!!!!!!!!!");
 					tmpUser.setUsername(editUserForm.get().getUsername());
-					tmpUser.setEmail(editUserForm.get().getEmail());					
+					tmpUser.setEmail(editUserForm.get().getEmail());
+					tmpUser.setPassword(editUserForm.get().getPassword());
 					tmpUser.setName(editUserForm.get().getName());
 					tmpUser.setSurname(editUserForm.get().getSurname());
 					tmpUser.setAge(editUserForm.get().getAge());
