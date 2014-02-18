@@ -82,7 +82,7 @@ public class User {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Comment> comments;
 
-	@OneToMany(mappedBy = "userUploader", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "userUploader", fetch = FetchType.EAGER)	
 	private Set<Video> videos;
 
 	public Set<Video> getVideos() {

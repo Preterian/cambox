@@ -11,7 +11,7 @@
 <div class="clear"></div>
       <div class="player">
         	<video class="video-js vjs-default-skin" controls preload="none" width="960" height="540"
-			      poster="@routes.Assets.at("images/play_icon.png")"
+			      poster="@routes.Assets.at(video.getBigPreviewUrl())"
 			      data-setup="{}">
 			    <source src="@routes.Assets.at(video.getUrl())" type='video/mp4' />			    
   			</video>
@@ -90,7 +90,7 @@
 			<div class="videoPreview">
 				<div class="previewImg">
 					<img src="@routes.Assets.at(relVideo.getSmallPreviewUrl())"> <img
-						src="@routes.Assets.at(" images/play_icon.png")" class="playIcon">
+						src="@routes.Assets.at(relVideo.getBigPreviewUrl())" class="playIcon">
 				</div>
 
 				<p class="title">@relVideo.getName()</p>

@@ -46,8 +46,13 @@ public class CommentDao {
 	}
 
 	@Transactional
-	public static void deleteComment(Comment comment) {
-		JPA.em().remove(comment);
+	public static void deleteComment(final Comment comment) {
+		JPA.withTransaction(new play.libs.F.Callback0() {
+			@Override
+			public void invoke() throws Throwable {
+				JPA.em().remove(JPA.em().contains(comment) ? comment : JPA.em().merge(comment));
+			}
+		});
 	}
 
 }

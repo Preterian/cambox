@@ -26,6 +26,11 @@ $( document ).ready(function() {
     	  var linkToParse = $( ui.draggable ).attr( "href" );
     	  console.log(linkToParse);
     	  
+    	  $(this).animate({    		    
+    		    opacity:'0.5',
+    		        		    
+    		  });
+    	  
     	  $.ajax({
   	        type : 'GET',
   	        url : '/addvideotocollection',

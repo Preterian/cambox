@@ -119,34 +119,25 @@ public class VideoController extends Controller {
 				String title = uploadVideoForm.get().getName();
 				String path = "public/users/".concat(currentUserEmail)
 						.concat("/").concat("videos/").concat(category);
-
-				String videoImagesPath = path.concat("/preview.png");
+				
 				File file = filePart.getFile();
 				File theDir = new File(path);
 				if (!theDir.exists()) {
 					theDir.mkdirs();
 				}
-
+				
 				path = path.concat("/").concat(title).concat("_")
 						.concat(fileName);
 				file.renameTo(new File(path));
 
-				try {
-					int frameNumber = 150;
-					BufferedImage frame = FrameGrab.getFrame(new File("path"),
-							frameNumber);
-					ImageIO.write(frame, "png", new File(videoImagesPath));
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (JCodecException e1) {
-					e1.printStackTrace();
-				}
-				System.err.println("FILENAME = " + fileName);
+				String imgPath = genImgPath(path, title.concat("_").concat(fileName));
+				new DecodeAndCaptureFrames(path, title, imgPath);
+			
 				path = path.replace("public/", "");
 				Video video = new Video(title, category, uploadVideoForm.get()
 						.getDescription(), 0, path, new Date());
-				video.setBigPreviewUrl(videoImagesPath);
+			
+				video.setBigPreviewUrl(imgPath);
 				VideoDao.saveVideoByEmail(video, currentUserEmail);
 
 				return ok(mybox.render(UserDao
@@ -159,6 +150,17 @@ public class VideoController extends Controller {
 
 		}
 
+	}
+	
+	private static String genImgPath(String fileNamePath, String fileName){
+		int start = fileNamePath.indexOf('/');
+		 int a = fileNamePath.lastIndexOf('/');
+   	  	 String imgPath = "";
+   	  	 for(int i = start; i < a; i++){
+   	  		 imgPath += fileNamePath.charAt(i);
+   	  	 }
+   	  	 
+   	  	 return imgPath.concat("/").concat(fileName).concat(".png"); 
 	}
 
 	@Security.Authenticated(Secured.class)
@@ -322,9 +324,10 @@ public class VideoController extends Controller {
 		id= id.reverse();
 				
 		System.err.println("======"+ id);
-		//Video video = getVideoById(Long.parseLong(id.toString()));
-		//UserDao.addVideoToUser(video, UserDao.findUserByEmail(session("email")));
+		Video video = getVideoById(Long.parseLong(id.toString()));		
+		UserDao.addVideoToUser(video, UserDao.findUserByEmail(session("email")));
 		System.err.println("need to add video to user");
+		System.err.println("=============" + video.getName());
 		return ok();
 	}
 
@@ -334,9 +337,16 @@ public class VideoController extends Controller {
 	
 	
 	
-	public static Result submitDelete(){
-		System.err.println("===============Trying to delete video");		
-		return TODO;
+	public static Result submitDelete(){		
+		Video videoObj = genVideo();
+		System.err.println("===============Trying to delete video" + videoObj.getName());
+		/*if(videoObj.getComments().size()>=0){
+			for(Comment com : videoObj.getComments()){
+				CommentDao.deleteComment(com);
+			}
+		}*/
+		VideoDao.deteleVideo(videoObj);
+		return Application.index();
 	}
 	
 	
@@ -379,5 +389,12 @@ public class VideoController extends Controller {
 		}
 		return null;
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 }

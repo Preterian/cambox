@@ -121,7 +121,7 @@ public class VideoDao {
 		JPA.withTransaction(new play.libs.F.Callback0() {
 			@Override
 			public void invoke() throws Throwable {
-				JPA.em().remove(video);
+				JPA.em().remove(JPA.em().contains(video) ? video : JPA.em().merge(video));
 			}
 		});
 	}

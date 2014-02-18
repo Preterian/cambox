@@ -4,6 +4,7 @@ import static play.data.Form.form;
 
 import java.util.List;
 
+import notifiers.Mails;
 import dao.UserDao;
 import dao.VideoDao;
 import models.*;
@@ -25,6 +26,8 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result myBox() {
 		String email = session("email");
+		
+		Mails.welcome(getUserByEmail(email));
 		return ok(mybox.render(getUserByEmail(email)));
 	}
 

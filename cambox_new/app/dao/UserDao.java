@@ -1,5 +1,6 @@
 package dao;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import models.User;
@@ -32,11 +33,17 @@ public class UserDao {
 
 	@Transactional
 	public static void addVideoToUser(final Video video, final User user) {
+		
 		JPA.withTransaction(new play.libs.F.Callback0() {
 			@Override
-			public void invoke() throws Throwable {
-				user.getVideos().add(video);
-				JPA.em().persist(user);
+			public void invoke() throws Throwable {				
+				//user.getVideos().add(video);	
+				
+				User userx = JPA.em().find(User.class, user.getUserId());
+				userx.getVideos().add(video);
+				
+				
+				JPA.em().persist(userx);								
 			}
 		});
 	}
